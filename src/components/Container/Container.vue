@@ -78,4 +78,14 @@
     }
 </script>
 <style scoped lang="scss">
+    #imooc-container {
+        /*transform-origin默认是center center 导致放缩后区域位置变化*/
+        /*设置left top 回到左上方*/
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        transform-origin: left top;
+        z-index: 999;
+    }
 </style>
