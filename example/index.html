@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>imooc datav libs example</title>
+    <!--    下载vue3.0的源码-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.0.0-beta.15/dist/vue.global.js"></script>
+    <script src="../dist/imooc.datav.js"></script>
+</head>
+<body>
+<div id="app">
+    <test-component></test-component>
+    <svg width="30" height="30" style="color:red">
+        <!--选择id为more的svg图标-->
+        <use href="#more"></use>
+    </svg>
+    <svg width="30" height="30" style="color:green">
+        <use href="#filledArrowRight"></use>
+    </svg>
+    <svg width="30" height="30" style="color:green">
+        <use href="#arrowRight"></use>
+    </svg>
+    <svg width="30" height="30" style="color:green">
+        <use href="#baojingxiangmu"></use>
+    </svg>
+    <Icon name="arrowRight" :style="{width:50, height:50}"></Icon>
+<!--    <svg-animation></svg-animation>-->
+    <!--<imooc-loading height="100" width="100">
+        <div style="font-size: 20px;color: red">
+            数据大屏加载中
+        </div>
+    </imooc-loading>-->
+    <imooc-fly-box>
+        <div>111</div>
+        <div>222</div>
+    </imooc-fly-box>
+</div>
+<script>
+    Vue.createApp({
+        setup() {
+            var message = 'hello imooc!';
+            return {
+                message
+            }
+        }
+        //    注册imoocDatav，就是打包配置文件中umd的name，也可以在打包产物里面看到global.imoocDatav
+    }).use(window.imoocDatav).mount('#app');
+</script>
+
+</body>
+</html>
