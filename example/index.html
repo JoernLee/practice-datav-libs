@@ -9,31 +9,35 @@
 </head>
 <body>
 <div id="app">
-    <test-component></test-component>
-    <svg width="30" height="30" style="color:red">
-        <!--选择id为more的svg图标-->
-        <use href="#more"></use>
-    </svg>
-    <svg width="30" height="30" style="color:green">
-        <use href="#filledArrowRight"></use>
-    </svg>
-    <svg width="30" height="30" style="color:green">
-        <use href="#arrowRight"></use>
-    </svg>
-    <svg width="30" height="30" style="color:green">
-        <use href="#baojingxiangmu"></use>
-    </svg>
-    <Icon name="arrowRight" :style="{width:50, height:50}"></Icon>
-<!--    <svg-animation></svg-animation>-->
-    <!--<imooc-loading height="100" width="100">
-        <div style="font-size: 20px;color: red">
-            数据大屏加载中
-        </div>
-    </imooc-loading>-->
-    <imooc-fly-box>
-        <div>111</div>
-        <div>222</div>
-    </imooc-fly-box>
+<!--    <test-component></test-component>-->
+<!--    <svg width="30" height="30" style="color:red">-->
+<!--        &lt;!&ndash;选择id为more的svg图标&ndash;&gt;-->
+<!--        <use href="#more"></use>-->
+<!--    </svg>-->
+<!--    <svg width="30" height="30" style="color:green">-->
+<!--        <use href="#filledArrowRight"></use>-->
+<!--    </svg>-->
+<!--    <svg width="30" height="30" style="color:green">-->
+<!--        <use href="#arrowRight"></use>-->
+<!--    </svg>-->
+<!--    <svg width="30" height="30" style="color:green">-->
+<!--        <use href="#baojingxiangmu"></use>-->
+<!--    </svg>-->
+<!--    <Icon name="arrowRight" :style="{width:50, height:50}"></Icon>-->
+<!--&lt;!&ndash;    <svg-animation></svg-animation>&ndash;&gt;-->
+<!--    &lt;!&ndash;<imooc-loading height="100" width="100">-->
+<!--        <div style="font-size: 20px;color: red">-->
+<!--            数据大屏加载中-->
+<!--        </div>-->
+<!--    </imooc-loading>&ndash;&gt;-->
+<!--    <imooc-fly-box>-->
+<!--        <div>111</div>-->
+<!--        <div>222</div>-->
+<!--    </imooc-fly-box>-->
+<!--    数据大屏尺寸，用于锁定宽高比-->
+    <imooc-container :options="{width: 3840, height:2160}">
+        <div>123</div>
+    </imooc-container>
 </div>
 <script>
     Vue.createApp({

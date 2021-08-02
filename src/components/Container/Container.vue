@@ -1,0 +1,81 @@
+<template>
+    <div id="imooc-container" :ref="refName">
+        <slot></slot>
+    </div>
+</template>
+
+<script>
+    import {ref, getCurrentInstance, onMounted} from 'vue'
+
+    export default {
+        name: 'ImoocContainer',
+        props: {
+            options: Object
+        },
+        setup(ctx) {
+            const refName = 'imoocContainer';
+            const width = ref(0);
+            const height = ref(0);
+            const originalWidth = ref(0);
+            const originalHeight = ref(0);
+            let context, dom;
+
+            const init = () => {
+                dom = context.$refs[refName];
+                // 用户指定了宽高，就从用户获取，反之从dom获取
+                // 目的：获取大屏的真实尺寸
+                if (ctx.options && ctx.options.width && ctx.options.height) {
+                    width.value = ctx.options.width;
+                    height.value = ctx.options.height;
+                } else {
+                    width.value = dom.clientWidth;
+                    height.value = dom.clientHeight;
+                }
+                // 上述获取的宽高是实际宽高，接下来还需要视口区域的宽高获取
+                // 需要对外层的body标签设置宽高比为100%，取消margin和padding，默认视口就会盛满全屏
+                // 目的：通过window的screen对象来获取画布尺寸
+                if (!originalWidth.value || !originalHeight.value) {
+                    originalWidth.value = window.screen.width;
+                    originalHeight.value = window.screen.height;
+                }
+            };
+
+            const updateSize = () => {
+                // 保证外层dom容器的width和height的样式值
+                if (width.value && height.value) {
+                    dom.style.width = `${width.value}px`;
+                    dom.style.height = `${height.value}px`;
+                } else {
+                    dom.style.width = `${originalWidth.value}px`;
+                    dom.style.height = `${originalHeight.value}px`;
+                }
+            };
+
+            const updateScale = () => {
+                // 目的：获取真实（可视）的视口尺寸
+                const currentWidth = document.body.clientWidth;
+                const currentHeight = document.body.clientHeight;
+                // 目的：获取大屏最终的宽高
+                const realWidth = width.value || originalWidth.value;
+                const realHeight = height.value || originalHeight.value;
+                // 计算宽高比：当前用户实际要求的尺寸如何变化适配到当前的视口尺寸上
+                const widthScale = currentWidth / realWidth;
+                const heightScale = currentHeight / realHeight;
+                dom.style.transform = `scale(${widthScale},${heightScale})`
+            };
+
+            onMounted(() => {
+                // 渲染完成后拿到dom id指定的元素内容 - 获取dom宽高
+                context = getCurrentInstance().ctx;
+                init();
+                updateSize();
+            });
+
+            return {
+                refName
+            }
+        }
+    }
+</script>
+<style scoped lang="scss">
+</style>
