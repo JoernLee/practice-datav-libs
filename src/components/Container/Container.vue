@@ -5,7 +5,8 @@
 </template>
 
 <script>
-    import {ref, getCurrentInstance, onMounted} from 'vue'
+    import {ref, getCurrentInstance, onMounted, onUnmounted} from 'vue'
+    import {debounce} from '../../utils/index'
 
     export default {
         name: 'ImoocContainer',
@@ -20,7 +21,7 @@
             const originalHeight = ref(0);
             let context, dom;
 
-            const init = () => {
+            const initSize = () => {
                 dom = context.$refs[refName];
                 // 用户指定了宽高，就从用户获取，反之从dom获取
                 // 目的：获取大屏的真实尺寸
@@ -64,11 +65,22 @@
                 dom.style.transform = `scale(${widthScale},${heightScale})`
             };
 
+            const onResize = () => {
+                initSize();
+                updateScale();
+            };
+
             onMounted(() => {
                 // 渲染完成后拿到dom id指定的元素内容 - 获取dom宽高
                 context = getCurrentInstance().ctx;
-                init();
+                initSize();
                 updateSize();
+                updateScale();
+                window.addEventListener('resize',debounce(100, onResize))
+            });
+
+            onUnmounted(() => {
+                window.removeEventListener('resize', onResize);
             });
 
             return {
