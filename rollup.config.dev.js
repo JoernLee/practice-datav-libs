@@ -33,7 +33,14 @@ module.exports = {
         vue(),
         commonjs(),
         babel({
-            exclude: 'node_modules/**'
+            exclude: 'node_modules/**',
+            runtimeHelpers: true,
+            plugins:[
+                [
+                    '@babel/transform-runtime',{
+                    regenerator: true
+                }]
+            ]
         }),
         json(),
         postcss({
