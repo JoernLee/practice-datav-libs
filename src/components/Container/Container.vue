@@ -1,5 +1,6 @@
 <template>
-    <div id="imooc-container" :ref="refName">
+    <div id="imooc-container" :ref="refName" :style="style">
+        <button @click="changeStyle">change style</button>
         <slot></slot>
     </div>
 </template>
@@ -19,7 +20,16 @@
             const height = ref(0);
             const originalWidth = ref(0);
             const originalHeight = ref(0);
-            let context, dom;
+            let context, dom, observer;
+
+            const style = ref({});
+            const changeStyle = (() => {
+                style.value = {
+                    ...style.value,
+                    // 要带上单位，不要直接写1000
+                    height: '1000px'
+                }
+            });
 
             const initSize = () => {
                 dom = context.$refs[refName];
@@ -65,9 +75,29 @@
                 dom.style.transform = `scale(${widthScale},${heightScale})`
             };
 
-            const onResize = () => {
+            const onResize = (e) => {
+                console.log('onResize', e);
                 initSize();
                 updateScale();
+            };
+
+            const initMutationObserver = () => {
+                // 实例化监听器并启动观察，传入回调函数和配置
+                const MutationObserver = window.MutationObserver;
+                observer = new MutationObserver(onResize);
+                observer.observe(dom, {
+                    attributes: true,
+                    attributeFilter: ['style'],
+                    attributeOldValue: true
+                });
+            };
+
+            const removeMutationObserver = () => {
+                if (observer) {
+                    observer.disconnect();
+                    observer.takeRecords();
+                    observer = null;
+                }
             };
 
             onMounted(() => {
@@ -77,14 +107,18 @@
                 updateSize();
                 updateScale();
                 window.addEventListener('resize',debounce(100, onResize))
+                initMutationObserver();
             });
 
             onUnmounted(() => {
                 window.removeEventListener('resize', onResize);
+                removeMutationObserver();
             });
 
             return {
-                refName
+                refName,
+                style,
+                changeStyle
             }
         }
     }
