@@ -1,7 +1,8 @@
 <template>
     <div id="imooc-container" :ref="refName" :style="style">
-        <button @click="changeStyle">change style</button>
-        <slot></slot>
+        <template v-if="ready">
+            <slot></slot>
+        </template>
     </div>
 </template>
 
@@ -20,16 +21,8 @@
             const height = ref(0);
             const originalWidth = ref(0);
             const originalHeight = ref(0);
+            const ready = ref(false);
             let context, dom, observer;
-
-            const style = ref({});
-            const changeStyle = (() => {
-                style.value = {
-                    ...style.value,
-                    // 要带上单位，不要直接写1000
-                    height: '1000px'
-                }
-            });
 
             const initSize = () => {
                 dom = context.$refs[refName];
@@ -101,6 +94,7 @@
             };
 
             onMounted(() => {
+                ready.value = false;
                 // 渲染完成后拿到dom id指定的元素内容 - 获取dom宽高
                 context = getCurrentInstance().ctx;
                 initSize();
@@ -108,6 +102,7 @@
                 updateScale();
                 window.addEventListener('resize',debounce(100, onResize))
                 initMutationObserver();
+                ready.value = true;
             });
 
             onUnmounted(() => {
@@ -117,8 +112,7 @@
 
             return {
                 refName,
-                style,
-                changeStyle
+                ready
             }
         }
     }
